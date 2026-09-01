@@ -1,6 +1,7 @@
 package com.js.todo_app.service;
 
 import com.js.todo_app.dto.request.ChageTaskCompletion;
+import com.js.todo_app.dto.request.TaskTitleUpdateReq;
 import com.js.todo_app.dto.request.TodoCreate;
 import com.js.todo_app.dto.response.AllTaskReturn;
 import com.js.todo_app.entity.Todo;
@@ -49,10 +50,27 @@ public class TodoService {
         );
     }
 
+//    Change task title
+    public AllTaskReturn changeTaskTitle(Long id, TaskTitleUpdateReq taskTitleUpdateReq){
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(()-> new TaskNotFoundException("Task not found with id: "+id));
+
+        todo.setTask(taskTitleUpdateReq.task());
+
+        Todo savedTodo=todoRepository.save(todo);
+
+        return new AllTaskReturn(
+                savedTodo.getId(),
+                savedTodo.getTask(),
+                savedTodo.isComplete(),
+                savedTodo.getCreatedAt()
+        );
+    }
+
 //    change task completion
     public AllTaskReturn changeTaskCompletion(Long id){
         Todo todo= todoRepository.findById(id)
-                .orElseThrow(()-> new TaskNotFoundException("Task not found with the id "+id));
+                .orElseThrow(()-> new TaskNotFoundException("Task not found with the id: "+id));
 
         todo.setComplete(!todo.isComplete());
 

@@ -1,5 +1,7 @@
 package com.js.todo_app.controller;
 
+import com.js.todo_app.dto.request.ChageTaskCompletion;
+import com.js.todo_app.dto.request.TaskTitleUpdateReq;
 import com.js.todo_app.dto.request.TodoCreate;
 import com.js.todo_app.dto.response.AllTaskReturn;
 import com.js.todo_app.service.TodoService;
@@ -30,7 +32,16 @@ public class TodoController {
                 .body(todoService.addTask(request));
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/update-title")
+    public ResponseEntity<AllTaskReturn> changeTaskTitle(@PathVariable Long id, @RequestBody TaskTitleUpdateReq request){
+        AllTaskReturn response=todoService.changeTaskTitle(id,request);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
+
+    @PatchMapping("/{id}/update-completion")
     public ResponseEntity<AllTaskReturn> changeTaskCompletion(@PathVariable Long id){
 
         AllTaskReturn response = todoService.changeTaskCompletion(id);
