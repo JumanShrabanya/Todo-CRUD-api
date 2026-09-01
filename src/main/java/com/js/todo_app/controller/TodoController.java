@@ -29,4 +29,14 @@ public class TodoController {
                 .status(HttpStatus.CREATED)
                 .body(todoService.addTask(request));
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<AllTaskReturn> changeTaskCompletion(@PathVariable Long id){
+
+        AllTaskReturn response = todoService.changeTaskCompletion(id);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
 }

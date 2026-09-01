@@ -1,10 +1,13 @@
 package com.js.todo_app.service;
 
+import com.js.todo_app.dto.request.ChageTaskCompletion;
 import com.js.todo_app.dto.request.TodoCreate;
 import com.js.todo_app.dto.response.AllTaskReturn;
 import com.js.todo_app.entity.Todo;
+import com.js.todo_app.exception.TaskNotFoundException;
 import com.js.todo_app.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -38,6 +41,23 @@ public class TodoService {
         newTodo.setCreatedAt(new Date());
 
         Todo savedTodo=todoRepository.save(newTodo);
+        return new AllTaskReturn(
+                savedTodo.getId(),
+                savedTodo.getTask(),
+                savedTodo.isComplete(),
+                savedTodo.getCreatedAt()
+        );
+    }
+
+//    change task completion
+    public AllTaskReturn changeTaskCompletion(Long id){
+        Todo todo= todoRepository.findById(id)
+                .orElseThrow(()-> new TaskNotFoundException("Task not found with the id "+id));
+
+        todo.setComplete(!todo.isComplete());
+
+        Todo savedTodo = todoRepository.save(todo);
+
         return new AllTaskReturn(
                 savedTodo.getId(),
                 savedTodo.getTask(),
