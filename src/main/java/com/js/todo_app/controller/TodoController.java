@@ -50,4 +50,11 @@ public class TodoController {
                 .status(HttpStatus.OK)
                 .body(response);
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTask(@PathVariable Long id){
+        todoService.deleteTask(id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("Task deleted successfully");
+    }
 }

@@ -83,4 +83,11 @@ public class TodoService {
                 savedTodo.getCreatedAt()
         );
     }
+//    delete a task
+    public void deleteTask(Long id){
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(()-> new TaskNotFoundException("Task not found with id: "+id));
+
+        todoRepository.deleteById(todo.getId());
+    }
 }
